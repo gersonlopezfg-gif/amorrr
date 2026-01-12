@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Para Ti</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* --- Configuración Base y Tipografía --- */
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            margin: 0;
+            overflow: hidden;
+            background-color: #050505; /* Casi negro absoluto para contraste */
+            color: #fff;
+        }
+
+        .font-script {
+            font-family: 'Great Vibes', cursive;
+        }
+
+        /* --- Fondo Animado (Canvas) --- */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: radial-gradient(circle at center bottom, #1a0b14 0%, #000000 100%);
+        }
+
+        /* --- Estilo Cristal (Glassmorphism) --- */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        /* --- Animaciones de Interfaz --- */
+        .fade-in-up {
+            animation: fadeInUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .input-glow:focus {
+            box-shadow: 0 0 20px rgba(220, 38, 38, 0.5); /* Resplandor rojo suave */
+            border-color: rgba(220, 38, 38, 0.6);
+        }
+
+        /* Animación de latido para el botón */
+        .heartbeat {
+            animation: beat 2s infinite ease-in-out;
+        }
+
+        @keyframes beat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); box-shadow: 0 0 25px rgba(220, 38, 38, 0.4); }
+        }
+
+        /* Control de visibilidad */
+        .screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            transition: opacity 1s ease, transform 1s ease;
+            padding: 20px;
+        }
+
+        .hidden-screen {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(1.1);
+        }
+
+        /* --- Estilos del Poema --- */
+        .poem-text p {
+            margin-bottom: 1.2rem;
+            line-height: 1.6;
+        }
+        
+        /* Highlight dorado suave */
+        .highlight {
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. Fondo de Partículas (Amapolas de Luz) -->
+    <canvas id="canvas-container"></canvas>
+
+    <!-- 2. Pantalla de Bloqueo -->
+    <div id="login-screen" class="screen">
+        <div class="glass-card w-full max-w-sm p-8 rounded-2xl text-center fade-in-up">
+            <div class="mb-6">
+                <!-- Icono candado corazón -->
+                <svg class="w-12 h-12 mx-auto text-red-500/80 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+                <h2 class="text-3xl font-script text-white/90">Una fecha inolvidable</h2>
+                <p class="text-white/50 text-sm mt-2 font-light tracking-wide">¿Cuándo comenzó nuestro universo?</p>
+            </div>
+
+            <input type="text" id="date-input" placeholder="DD/MM/AAAA" 
+                   class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-center text-white placeholder-white/30 outline-none transition-all duration-300 input-glow tracking-widest text-lg mb-6 backdrop-blur-sm">
+
+            <button onclick="checkDate()" 
+                    class="w-full bg-gradient-to-r from-red-900 to-red-700 hover:from-red-800 hover:to-red-600 text-white py-3 rounded-lg shadow-lg transform transition-all duration-300 text-lg tracking-wider border border-red-500/30 heartbeat">
+                Descubrir
+            </button>
+            
+            <p id="error-msg" class="text-red-400 mt-4 text-sm opacity-0 transition-opacity duration-300 font-light">Esa no es la fecha correcta...</p>
+        </div>
+    </div>
+
+    <!-- 3. Pantalla del Poema -->
+    <div id="content-screen" class="screen hidden-screen">
+        <!-- Contenedor con scroll si el poema es muy largo en pantallas pequeñas -->
+        <div class="glass-card w-full max-w-md p-8 md:p-12 rounded-3xl relative overflow-hidden flex flex-col max-h-[90vh]">
+            
+            <!-- Decoración sutil -->
+            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500/50 to-transparent"></div>
+
+            <div class="overflow-y-auto custom-scrollbar text-center relative z-10">
+                <h1 class="font-script text-5xl text-red-100/90 mb-6 drop-shadow-lg">Para Ti</h1>
+                
+                <div class="poem-text text-xl md:text-2xl text-white/90 font-light">
+                    <p>La primera vez que te vi fue algo verdaderamente hermoso.</p>
+                    
+                    <p>He conocido personas, he salido con gente, y pensé que sería igual…<br>
+                    pero al verte fue <span class="italic text-red-200">distinto</span>.</p>
+
+                    <p>Fue como si el multiverso se alineara solo para mí,<br>
+                    como si el <span class="highlight">Big Bang</span> no hubiera ocurrido al inicio del tiempo,<br>
+                    sino justo en ese instante donde tus ojos se cruzaron con los míos.</p>
+
+                    <p>Desde entonces todo tiene sentido,<br>
+                    porque en cada universo, en cada posibilidad,<br>
+                    sigues siendo tú.</p>
+
+                    <p class="py-2">
+                        Tú y yo, bailando como las <span class="text-red-400 font-semibold drop-shadow-md">amapolas de luz</span>,<br>
+                        flotando suaves, brillando despacio,<br>
+                        sin prisa, sin ruido,<br>
+                        iluminando el momento solo con nuestra existencia.
+                    </p>
+
+                    <p>Tu belleza es infinita, delicada y real,<br>
+                    y en mi caos, <span class="highlight">tú eres el orden más perfecto</span>. ✨</p>
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-white/10">
+                    <p class="font-script text-3xl text-white/60">Eternamente tuyo</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Lógica del Canvas (Partículas de Luz / Amapolas) ---
+        const canvas = document.getElementById('canvas-container');
+        const ctx = canvas.getContext('2d');
+        let particlesArray;
+
+        // Ajustar canvas al tamaño de la pantalla
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            init();
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                // Tamaño variable para profundidad
+                this.size = Math.random() * 3 + 1; 
+                // Velocidad lenta y flotante
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                // Color: Rojos, Dorados y Blancos suaves
+                const colors = [
+                    'rgba(255, 100, 100, ', // Rojo suave
+                    'rgba(255, 215, 0, ',   // Dorado
+                    'rgba(255, 255, 255, '  // Blanco
+                ];
+                this.colorBase = colors[Math.floor(Math.random() * colors.length)];
+                this.opacity = Math.random() * 0.5 + 0.1;
+                this.pulseSpeed = 0.02;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                // Efecto rebote suave en bordes
+                if (this.x > canvas.width || this.x < 0) this.speedX = -this.speedX;
+                if (this.y > canvas.height || this.y < 0) this.speedY = -this.speedY;
+
+                // Efecto de parpadeo (respiración)
+                if (this.opacity > 0.8 || this.opacity < 0.1) this.pulseSpeed = -this.pulseSpeed;
+                this.opacity += this.pulseSpeed;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                // Gradiente radial para que parezcan orbes de luz
+                let gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 2);
+                gradient.addColorStop(0, this.colorBase + this.opacity + ')');
+                gradient.addColorStop(1, 'rgba(0,0,0,0)');
+                ctx.fillStyle = gradient;
+                ctx.fill();
+            }
+        }
+
+        function init() {
+            particlesArray = [];
+            // Crear 100 partículas (ajustable según rendimiento)
+            let numberOfParticles = (canvas.width * canvas.height) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+
+        function animate() {
+            // Limpiar canvas pero dejando una estela suave (trail effect)
+            ctx.fillStyle = 'rgba(10, 5, 10, 0.1)'; // Color de fondo con transparencia
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+            }
+            requestAnimationFrame(animate);
+        }
+
+        init();
+        animate();
+
+
+        // --- Lógica de la Contraseña ---
+        function checkDate() {
+            const input = document.getElementById('date-input').value.trim();
+            const correctDate = "16/12/2025";
+            const loginScreen = document.getElementById('login-screen');
+            const contentScreen = document.getElementById('content-screen');
+            const errorMsg = document.getElementById('error-msg');
+
+            if (input === correctDate) {
+                // Transición de salida
+                loginScreen.style.opacity = '0';
+                loginScreen.style.transform = 'scale(0.95)';
+                
+                setTimeout(() => {
+                    loginScreen.style.display = 'none';
+                    
+                    // Transición de entrada del poema
+                    contentScreen.classList.remove('hidden-screen');
+                    // Pequeño hack para reiniciar la animación CSS si fuera necesario
+                    void contentScreen.offsetWidth; 
+                    contentScreen.style.opacity = '1';
+                    contentScreen.style.transform = 'scale(1)';
+                }, 800);
+            } else {
+                // Efecto de error
+                errorMsg.style.opacity = '1';
+                // Vibración simple
+                const inputField = document.getElementById('date-input');
+                inputField.style.transform = 'translateX(10px)';
+                setTimeout(() => inputField.style.transform = 'translateX(-10px)', 100);
+                setTimeout(() => inputField.style.transform = 'translateX(0)', 200);
+            }
+        }
+
+        // Permitir Enter
+        document.getElementById('date-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                checkDate();
+            }
+        });
+    </script>
+</body>
+</html>
