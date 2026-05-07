@@ -4,220 +4,284 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Para Ti ❤️</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        amor: {
+                            100: '#ffe4e6',
+                            300: '#fda4af',
+                            500: '#f43f5e',
+                            700: '#be123c',
+                            900: '#881337',
+                        }
+                    },
+                    fontFamily: {
+                        script: ['"Great Vibes"', 'cursive'],
+                        title: ['"Cinzel"', 'serif'],
+                        body: ['"Montserrat"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
     <style>
-        /* --- ESTÉTICA GENERAL --- */
+        /* --- ESTILOS BASE --- */
         body {
-            font-family: 'Montserrat', sans-serif;
             margin: 0;
             overflow: hidden;
-            background-color: #0f0204;
+            background-color: #050001; /* Fondo ultra oscuro */
             color: white;
             touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .font-script { font-family: 'Great Vibes', cursive; }
-        .font-title { font-family: 'Cinzel', serif; }
+        /* --- GRADIENTE DE FONDO --- */
+        #bg-gradient {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center 80%, #4a0414 0%, #050001 80%);
+            z-index: 0;
+        }
 
-        /* --- FONDO ANIMADO --- */
         #canvas-bg {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            background: radial-gradient(circle at center bottom, #3d0a11 0%, #000000 100%);
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1;
+            pointer-events: none;
         }
 
         /* --- CONTENEDORES --- */
         .screen {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 10;
-            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 20px;
+            transition: all 1.2s cubic-bezier(0.65, 0, 0.35, 1);
+            padding: 1.5rem;
         }
 
-        /* --- TARJETA DE CRISTAL --- */
+        /* --- EFECTO CRISTAL (GLASSMORPHISM) PREMIUM --- */
         .glass-panel {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
         }
 
-        /* --- TEXTOS Y EFECTOS --- */
-        .glowing-date {
-            text-shadow: 0 0 20px rgba(255, 50, 50, 0.6), 0 0 40px rgba(255, 50, 50, 0.3);
-            animation: pulse-glow 3s infinite ease-in-out;
+        /* --- EFECTOS DE TEXTO --- */
+        .glowing-text {
+            text-shadow: 0 0 20px rgba(244, 63, 94, 0.5), 0 0 40px rgba(244, 63, 94, 0.2);
         }
 
-        @keyframes pulse-glow {
-            0%, 100% { opacity: 0.8; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.05); }
+        .highlight-glow {
+            text-shadow: 0 0 15px rgba(253, 164, 175, 0.4);
         }
 
-        .highlight-red {
-            color: #ff4d6d;
-            font-weight: 600;
-            text-shadow: 0 0 10px rgba(255, 77, 109, 0.3);
-        }
-
-        /* --- BOTÓN DE CORAZÓN --- */
-        .btn-open {
-            background: linear-gradient(135deg, #d61c4e 0%, #8a1c1c 100%);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 0 25px rgba(214, 28, 78, 0.4);
-            transition: all 0.4s ease;
+        /* --- BOTÓN MEJORADO --- */
+        .btn-magic {
+            background: linear-gradient(135deg, #e11d48 0%, #9f1239 100%);
+            box-shadow: 0 10px 25px -5px rgba(225, 29, 72, 0.5), 0 8px 10px -6px rgba(225, 29, 72, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
         }
         
-        .btn-open::before {
+        .btn-magic::after {
             content: '';
             position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: 0.5s;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg) translateY(-100%);
+            transition: 0.6s ease;
         }
         
-        .btn-open:hover::before { left: 100%; }
-        .btn-open:active { transform: scale(0.95); }
+        .btn-magic:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 30px -5px rgba(225, 29, 72, 0.6);
+        }
+
+        .btn-magic:hover::after {
+            transform: rotate(45deg) translateY(100%);
+        }
+
+        .btn-magic:active {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        /* --- ANIMACIONES CSS --- */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+        }
+        .animate-float { animation: float 5s ease-in-out infinite; }
+
+        @keyframes pulse-soft {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+        }
+        .animate-pulse-soft { animation: pulse-soft 3s ease-in-out infinite; }
 
         /* --- TRANSICIONES DE PANTALLA --- */
-        .hidden-up {
+        .screen-hidden-up {
             opacity: 0;
-            transform: translateY(-50px) scale(0.9);
+            transform: translateY(-80px) scale(0.95);
             pointer-events: none;
         }
         
-        .hidden-down {
+        .screen-hidden-down {
             opacity: 0;
-            transform: translateY(50px);
+            transform: translateY(80px) scale(0.95);
             pointer-events: none;
         }
         
-        .visible {
+        .screen-visible {
             opacity: 1;
             transform: translateY(0) scale(1);
         }
 
-        /* --- SCROLL OCULTO --- */
-        .no-scroll::-webkit-scrollbar { display: none; }
-        .no-scroll { -ms-overflow-style: none; scrollbar-width: none; }
-
-        /* --- ANIMACIÓN FLOTANTE --- */
-        .float { animation: floating 4s ease-in-out infinite; }
-        @keyframes floating {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+        /* --- EFECTO CASCADA PARA EL POEMA --- */
+        .stagger-item {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
         }
+        .stagger-item.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Ocultar scrollbar pero permitir scroll */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
     </style>
 </head>
-<body>
+<body class="font-body antialiased selection:bg-amor-500 selection:text-white">
 
-    <!-- FONDO INTERACTIVO -->
+    <!-- FONDOS -->
+    <div id="bg-gradient"></div>
     <canvas id="canvas-bg"></canvas>
 
-    <!-- PANTALLA 1: BIENVENIDA (LA FECHA) -->
-    <div id="intro-screen" class="screen">
-        <div class="glass-panel p-8 md:p-12 w-full max-w-sm text-center flex flex-col items-center relative overflow-hidden">
+    <!-- PANTALLA 1: LA FECHA INOLVIDABLE -->
+    <div id="intro-screen" class="screen screen-visible">
+        <div class="glass-panel p-10 md:p-14 w-full max-w-md text-center flex flex-col items-center relative z-20">
             
-            <!-- Decoración superior -->
-            <div class="text-4xl mb-4 animate-bounce text-red-500">❤️</div>
+            <!-- Corazón superior animado -->
+            <div class="text-5xl mb-6 animate-pulse-soft drop-shadow-[0_0_15px_rgba(244,63,94,0.6)]">❤️</div>
 
-            <p class="text-sm tracking-widest uppercase text-gray-400 mb-2">Nunca olvidaré el...</p>
+            <p class="text-xs md:text-sm tracking-[0.2em] uppercase text-amor-100/70 mb-4 font-medium">Nunca olvidaré el...</p>
             
-            <!-- LA FECHA IMPORTANTE -->
-            <div class="mb-8 relative">
-                <h1 class="font-title text-4xl md:text-5xl text-white glowing-date leading-tight">
-                    3 <br> <span class="text-3xl md:text-4xl text-red-200">Mayo</span> <br> 2026
+            <!-- FECHA PRINCIPAL MEJORADA -->
+            <div class="my-6 relative z-10 w-full animate-float">
+                <h1 class="font-title text-white glowing-text leading-tight flex flex-col items-center gap-1">
+                    <span class="text-7xl md:text-8xl font-bold">3</span>
+                    <span class="font-script text-4xl md:text-5xl text-amor-300 transform -rotate-2 my-2 highlight-glow">de mayo del</span>
+                    <span class="text-5xl md:text-6xl font-bold tracking-widest text-white/90">2026</span>
                 </h1>
-                <!-- Destello decorativo -->
-                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full bg-red-500 blur-3xl opacity-10 rounded-full animate-pulse"></div>
             </div>
 
-            <p class="font-script text-2xl text-red-200/80 mb-8">El día que todo comenzó.</p>
+            <p class="font-body font-light italic text-base text-amor-100/60 mb-10 mt-4 max-w-[250px]">
+                El día en que el universo conspiró a nuestro favor.
+            </p>
 
-            <button onclick="openLetter()" class="btn-open px-8 py-3 rounded-full text-white font-bold tracking-widest text-sm uppercase flex items-center gap-2 group cursor-pointer z-20">
+            <button onclick="openLetter()" class="btn-magic px-8 py-3.5 rounded-full text-white font-semibold tracking-widest text-sm uppercase flex items-center gap-3 group cursor-pointer border border-white/20">
                 <span>Leer Carta</span>
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:translate-x-1.5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
             </button>
         </div>
     </div>
 
-    <!-- PANTALLA 2: EL NUEVO POEMA -->
-    <div id="letter-screen" class="screen hidden-down">
-        <div class="glass-panel w-full max-w-md h-[90vh] flex flex-col relative overflow-hidden">
+    <!-- PANTALLA 2: EL POEMA -->
+    <div id="letter-screen" class="screen screen-hidden-down">
+        <div class="glass-panel w-full max-w-lg h-[85vh] md:h-[90vh] flex flex-col relative overflow-hidden shadow-[0_0_50px_rgba(159,18,57,0.15)]">
             
-            <!-- Efecto de luz superior -->
-            <div class="absolute top-0 w-full h-20 bg-gradient-to-b from-red-900/20 to-transparent z-0 pointer-events-none"></div>
+            <!-- Difuminado superior e inferior para el scroll -->
+            <div class="absolute top-0 w-full h-12 bg-gradient-to-b from-[#110105] to-transparent z-10 pointer-events-none rounded-t-3xl"></div>
+            <div class="absolute bottom-0 w-full h-12 bg-gradient-to-t from-[#110105] to-transparent z-10 pointer-events-none rounded-b-3xl"></div>
 
-            <div class="flex-1 overflow-y-auto no-scroll p-6 md:p-8 relative z-10 text-center">
+            <div id="poem-container" class="flex-1 overflow-y-auto no-scrollbar p-8 md:p-12 relative z-0 text-center pb-20">
                 
-                <h2 class="font-script text-5xl text-red-200 mb-8 drop-shadow-lg float">Para Ti</h2>
+                <h2 class="font-script text-6xl md:text-7xl text-amor-300 mb-10 drop-shadow-[0_4px_10px_rgba(0,0,0,0.5)] stagger-item">Para Ti</h2>
 
-                <div class="space-y-6 text-lg text-gray-200 font-light leading-relaxed">
-                    <p>La primera vez que te vi<br>
-                    entendí que la belleza no es casualidad,<br>
-                    es una <span class="text-red-300 font-medium">coincidencia perfecta del universo.</span></p>
+                <div class="space-y-8 text-base md:text-lg text-gray-200 font-light leading-relaxed">
                     
-                    <p class="text-sm md:text-base opacity-80">
-                        He conocido personas,<br>
-                        pensé que todos los encuentros eran iguales,<br>
-                        hasta que tu presencia<br>
-                        <span class="italic text-white">desmintió esa teoría.</span>
+                    <p class="stagger-item">
+                        La primera vez que te vi<br>
+                        entendí que la belleza no es casualidad,<br>
+                        es una <span class="text-amor-300 font-medium">obra maestra del universo.</span>
+                    </p>
+                    
+                    <p class="text-sm md:text-base text-gray-300 stagger-item">
+                        Cada detalle en ti<br>
+                        parece haber sido esculpido<br>
+                        con el polvo de las estrellas<br>
+                        <span class="italic text-white">más resplandecientes.</span>
                     </p>
 
-                    <div class="w-20 h-px bg-red-500/50 mx-auto my-4"></div>
+                    <div class="w-16 h-[1px] bg-amor-500/30 mx-auto my-6 stagger-item"></div>
 
-                    <p>Al mirarte, el <span class="highlight-red">multiverso</span> dejó de ser una idea lejana:<br>
-                    comprendí que en cada universo posible<br>
-                    tu belleza sigue siendo constante.</p>
+                    <p class="stagger-item">
+                        Al mirarte, el <span class="text-amor-500 font-semibold tracking-wide">multiverso</span> dejó de ser una idea lejana:<br>
+                        comprendí que en cada realidad posible<br>
+                        tu belleza sigue siendo la misma constante perfecta.
+                    </p>
 
-                    <div class="py-4 bg-white/5 rounded-xl border border-white/10 my-6 backdrop-blur-sm transform rotate-1 shadow-lg">
-                        <p class="mb-2 text-sm uppercase tracking-widest text-red-200 opacity-70">No eres parte del Big Bang,</p>
-                        <span class="font-title text-2xl md:text-3xl text-white block mt-1 glowing-date">Eres el Big Bang</span>
-                        <p class="mt-2 text-sm italic opacity-80 px-4">el instante exacto donde la luz aprendió a ser hermosa.</p>
+                    <!-- Tarjeta destacada -->
+                    <div class="py-6 px-4 bg-white/[0.03] rounded-2xl border border-white/[0.05] my-8 backdrop-blur-sm transform md:hover:scale-105 transition-transform duration-500 shadow-xl stagger-item">
+                        <p class="mb-2 text-xs md:text-sm uppercase tracking-[0.2em] text-amor-300/80">No eres parte del Big Bang,</p>
+                        <span class="font-title font-bold text-3xl md:text-4xl text-white block mt-2 glowing-text">Eres el Big Bang</span>
+                        <p class="mt-3 text-sm italic text-gray-300 px-4">el instante exacto donde la luz aprendió a ser hermosa.</p>
                     </div>
 
-                    <p>Tu belleza es infinita,<br>
-                    no se repite, no se agota,<br>
-                    existe con la precisión de una <span class="text-red-300">ley universal</span>.</p>
+                    <p class="stagger-item">
+                        Tu belleza es infinita,<br>
+                        inabarcable y absoluta.<br>
+                        Existe con la precisión de una <span class="text-amor-300 font-medium">ley universal</span>.
+                    </p>
 
-                    <p>Y si el origen de todo tuviera un rostro,<br>
-                    sin duda<br>
-                    <span class="font-script text-3xl text-red-200">se parecería al tuyo. ✨</span></p>
+                    <p class="stagger-item pb-4">
+                        Y si el origen de todo tuviera un rostro,<br>
+                        sin duda<br>
+                        <span class="font-script text-4xl md:text-5xl text-amor-300 block mt-4 animate-pulse-soft">se parecería al tuyo. ✨</span>
+                    </p>
                 </div>
 
-                <!-- Footer final -->
-                <div class="mt-10 mb-8 p-4 border-t border-red-500/20">
+                <!-- Footer del poema -->
+                <div class="mt-12 pt-8 border-t border-amor-900/30 stagger-item">
                     <p class="text-sm font-light italic text-gray-400">
                         "No sé explicarlo mejor…<br>solo sé que tu belleza es imposible de ignorar."
                     </p>
                 </div>
+                
             </div>
+            
+            <!-- Botón de volver -->
+            <button onclick="closeLetter()" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white/5 border border-white/10 text-white/50 hover:text-white hover:bg-white/10 rounded-full w-10 h-10 flex items-center justify-center transition-all z-20 backdrop-blur-md">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" />
+                </svg>
+            </button>
         </div>
     </div>
 
+    <!-- SCRIPTS MÁGICOS -->
     <script>
-        // --- ANIMACIÓN DE FONDO (ESTRELLAS Y PÉTALOS) ---
+        // --- SISTEMA DE PARTÍCULAS DE FONDO (Polvo de Estrellas) ---
         const canvas = document.getElementById('canvas-bg');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -233,90 +297,111 @@
             constructor() {
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2;
-                this.speedX = (Math.random() - 0.5) * 0.5;
-                this.speedY = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 1.5 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.3;
+                this.speedY = -Math.random() * 0.5 - 0.1; // Flotan hacia arriba lentamente
                 
-                // Color aleatorio: rojo, dorado o blanco
-                const colors = ['rgba(255, 50, 50, ', 'rgba(255, 215, 0, ', 'rgba(255, 255, 255, '];
+                // Tonos: rosado suave, blanco, rojo oscuro
+                const colors = ['255, 228, 230', '253, 164, 175', '244, 63, 94', '255, 255, 255'];
                 this.colorBase = colors[Math.floor(Math.random() * colors.length)];
-                this.opacity = Math.random() * 0.5 + 0.1;
+                this.opacity = Math.random() * 0.6 + 0.1;
+                this.pulseSpeed = Math.random() * 0.02 + 0.01;
+                this.pulseDir = Math.random() > 0.5 ? 1 : -1;
             }
             update() {
                 this.x += this.speedX;
                 this.y += this.speedY;
-                // Efecto de parpadeo
-                this.opacity += (Math.random() - 0.5) * 0.05;
-                if(this.opacity < 0) this.opacity = 0;
-                if(this.opacity > 0.8) this.opacity = 0.8;
                 
-                // Rebote suave en bordes
-                if(this.x < 0 || this.x > canvas.width) this.speedX *= -1;
-                if(this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+                // Pulso de luz
+                this.opacity += this.pulseSpeed * this.pulseDir;
+                if(this.opacity <= 0.1) { this.opacity = 0.1; this.pulseDir = 1; }
+                if(this.opacity >= 0.8) { this.opacity = 0.8; this.pulseDir = -1; }
+                
+                // Reposicionar si salen de la pantalla
+                if(this.x < 0) this.x = canvas.width;
+                if(this.x > canvas.width) this.x = 0;
+                if(this.y < 0) {
+                    this.y = canvas.height;
+                    this.x = Math.random() * canvas.width;
+                }
             }
             draw() {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = this.colorBase + this.opacity + ')';
+                ctx.fillStyle = `rgba(${this.colorBase}, ${this.opacity})`;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = `rgba(${this.colorBase}, ${this.opacity})`;
                 ctx.fill();
+                ctx.shadowBlur = 0; // Reset
             }
         }
 
-        // Crear partículas
         function initParticles() {
             particles = [];
-            const count = window.innerWidth < 600 ? 60 : 120; // Optimizado para móvil
+            const count = window.innerWidth < 600 ? 50 : 100;
             for(let i=0; i<count; i++) particles.push(new Particle());
         }
 
-        // Animación loop
-        function animate() {
+        function animateBg() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             particles.forEach(p => {
                 p.update();
                 p.draw();
             });
-            requestAnimationFrame(animate);
+            requestAnimationFrame(animateBg);
         }
 
         initParticles();
-        animate();
+        animateBg();
 
-        // --- INTERACCIÓN DE CLICK (EXPLOSIÓN DE CORAZONES) ---
-        function drawHeart(x, y, size, opacity) {
+        // --- SISTEMA DE EXPLOSIÓN DE CORAZONES AL HACER CLIC ---
+        function drawHeartShape(ctx, x, y, size, opacity, color) {
             ctx.save();
             ctx.globalAlpha = opacity;
             ctx.translate(x, y);
-            ctx.fillStyle = '#ff1744';
+            // Escalar para hacer el corazón
+            ctx.scale(size/10, size/10); 
+            ctx.fillStyle = color;
             ctx.beginPath();
-            ctx.moveTo(0, -size/2);
-            ctx.bezierCurveTo(size/2, -size, size, -size/3, 0, size);
-            ctx.bezierCurveTo(-size, -size/3, -size/2, -size, 0, -size/2);
+            ctx.moveTo(0, 0);
+            ctx.bezierCurveTo(0, -3, -5, -3, -5, 0);
+            ctx.bezierCurveTo(-5, 3, 0, 6, 0, 8);
+            ctx.bezierCurveTo(0, 6, 5, 3, 5, 0);
+            ctx.bezierCurveTo(5, -3, 0, -3, 0, 0);
             ctx.fill();
             ctx.restore();
         }
 
         let hearts = [];
+        const heartColors = ['#f43f5e', '#e11d48', '#fda4af', '#be123c'];
+
         function addExplosion(x, y) {
-            for(let i=0; i<10; i++) {
+            const count = Math.random() * 5 + 8; // 8 a 13 corazones
+            for(let i=0; i<count; i++) {
                 hearts.push({
-                    x: x, y: y,
-                    vx: (Math.random() - 0.5) * 5,
-                    vy: (Math.random() - 0.5) * 5,
-                    size: Math.random() * 10 + 5,
-                    life: 1
+                    x: x, 
+                    y: y,
+                    vx: (Math.random() - 0.5) * 8, // Velocidad X
+                    vy: (Math.random() - 0.5) * 8 - 2, // Velocidad Y (tendencia hacia arriba)
+                    size: Math.random() * 6 + 4,
+                    life: 1,
+                    decay: Math.random() * 0.02 + 0.015,
+                    color: heartColors[Math.floor(Math.random() * heartColors.length)]
                 });
             }
         }
 
-        // Loop separado para corazones de click
         function animateHearts() {
             for(let i=0; i<hearts.length; i++) {
                 let h = hearts[i];
                 h.x += h.vx;
                 h.y += h.vy;
-                h.life -= 0.02;
-                drawHeart(h.x, h.y, h.size, h.life);
+                h.vy += 0.15; // Gravedad leve
+                h.life -= h.decay;
+                
+                // Rotación basada en vx
+                drawHeartShape(ctx, h.x, h.y, h.size, h.life, h.color);
+                
                 if(h.life <= 0) {
                     hearts.splice(i, 1);
                     i--;
@@ -326,27 +411,62 @@
         }
         animateHearts();
 
-        // Eventos Touch/Click
-        window.addEventListener('click', (e) => addExplosion(e.clientX, e.clientY));
-        window.addEventListener('touchstart', (e) => addExplosion(e.touches[0].clientX, e.touches[0].clientY));
+        // Escuchar clics en todo el documento para la explosión
+        document.addEventListener('click', (e) => {
+            // No explotar si se hace clic en un botón para no entorpecer la UI
+            if(e.target.closest('button')) return; 
+            addExplosion(e.clientX, e.clientY);
+        });
+        document.addEventListener('touchstart', (e) => {
+            if(e.target.closest('button')) return;
+            addExplosion(e.touches[0].clientX, e.touches[0].clientY);
+        }, {passive: true});
 
 
-        // --- LÓGICA DE NAVEGACIÓN ---
+        // --- LÓGICA DE NAVEGACIÓN Y ANIMACIÓN DE CASCADA ---
         function openLetter() {
             const intro = document.getElementById('intro-screen');
             const letter = document.getElementById('letter-screen');
 
-            // Animación de salida
-            intro.classList.add('hidden-up');
+            // 1. Ocultar intro
+            intro.classList.remove('screen-visible');
+            intro.classList.add('screen-hidden-up');
             
-            // Animación de entrada
-            letter.classList.remove('hidden-down');
-            letter.classList.add('visible');
+            // 2. Mostrar carta
+            letter.classList.remove('screen-hidden-down');
+            letter.classList.add('screen-visible');
 
-            // Explosión de celebración automática
+            // 3. Explosión central de celebración
             setTimeout(() => {
                 addExplosion(window.innerWidth/2, window.innerHeight/2);
-            }, 500);
+                addExplosion(window.innerWidth/2 - 50, window.innerHeight/2 + 30);
+                addExplosion(window.innerWidth/2 + 50, window.innerHeight/2 + 30);
+            }, 600);
+
+            // 4. Animar el texto en cascada (stagger effect)
+            const staggerItems = document.querySelectorAll('.stagger-item');
+            // Resetear por si entra y sale
+            staggerItems.forEach(item => item.classList.remove('show'));
+            
+            staggerItems.forEach((item, index) => {
+                setTimeout(() => {
+                    item.classList.add('show');
+                }, 800 + (index * 200)); // Retraso inicial de 800ms, luego 200ms por cada párrafo
+            });
+        }
+
+        function closeLetter() {
+            const intro = document.getElementById('intro-screen');
+            const letter = document.getElementById('letter-screen');
+            
+            // Reset scroll del poema
+            document.getElementById('poem-container').scrollTop = 0;
+
+            letter.classList.remove('screen-visible');
+            letter.classList.add('screen-hidden-down');
+            
+            intro.classList.remove('screen-hidden-up');
+            intro.classList.add('screen-visible');
         }
 
     </script>
